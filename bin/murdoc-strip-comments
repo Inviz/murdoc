@@ -30,10 +30,12 @@ option_parser.parse!
 annotator = Murdoc::Annotator.from_file(ARGV[0] || "/dev/stdin", source_type, options)
 
 last = 0
+previous = nil
 annotator.paragraphs.each_with_index do |paragraph, i|
-  puts "\n" * (paragraph.starting_line - last) unless i == 0
+  puts "\n" * (paragraph.starting_line - last) unless (i == 0 || previous && previous.source.empty?)
 
   puts paragraph.source
 
   last = paragraph.starting_line + paragraph.source.split("\n").size
+  previous = paragraph
 end
