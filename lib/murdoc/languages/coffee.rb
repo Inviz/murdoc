@@ -22,7 +22,7 @@ module Murdoc
       module CommentSymbols
         protected
         def comment_symbols
-          if source_type == :coffee
+          if source_type == "coffee"
             {:single_line => "#", :multiline => {:begin => "###", :end => "###"}}
           else
             super if defined?(super)

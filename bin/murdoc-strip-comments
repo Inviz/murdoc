@@ -13,16 +13,27 @@ option_parser = OptionParser.new do |opts|
     source_type = st
   end
 
+  opts.on("--do-not-count-comment-lines") do |dncl|
+    options[:do_not_count_comment_lines] = dncl
+  end
+
   opts.on_tail("-h", "--help", "Show this message") do
     puts opts
     exit
   end
 
+
 end
 
 option_parser.parse!
 
-annotator = Murdoc::Annotator.from_file(ARGV[0] || "/dev/stdin", source_type, {})
-annotator.paragraphs.each do |paragraph|
+annotator = Murdoc::Annotator.from_file(ARGV[0] || "/dev/stdin", source_type, options)
+
+last = 0
+annotator.paragraphs.each_with_index do |paragraph, i|
+  puts "\n" * (paragraph.starting_line - last) unless i == 0
+
   puts paragraph.source
+
+  last = paragraph.starting_line + paragraph.source.split("\n").size
 end

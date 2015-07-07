@@ -34,7 +34,7 @@ module Murdoc
     def self.from_file(filename, source_type = nil, options = {})
       self.new(File.read(filename),
                source_type || detect_source_type_from_filename(filename),
-               options)
+               options.merge(:filename => filename))
     end
 
     def source_type
