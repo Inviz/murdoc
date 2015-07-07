@@ -32,9 +32,15 @@ annotator = Murdoc::Annotator.from_file(ARGV[0] || "/dev/stdin", source_type, op
 last = 0
 previous = nil
 annotator.paragraphs.each_with_index do |paragraph, i|
-  puts "\n" * (paragraph.starting_line - last) unless (i == 0 || previous && previous.source.empty?)
+  unless (i == 0 || previous && previous.source.empty?)
+    if paragraph.annotation.split("\n").size > 1
+      puts "\n" * (paragraph.starting_line - last)
+    end
+  end
 
-  puts paragraph.source
+  unless paragraph.source.empty?
+    puts paragraph.source
+  end
 
   last = paragraph.starting_line + paragraph.source.split("\n").size
   previous = paragraph
